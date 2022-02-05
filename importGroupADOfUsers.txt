@@ -1,0 +1,7 @@
+$UserList = get-content C:\Distr\ListOfUsers.csv
+$result = ForEach ($User in $UserList)
+{
+"User:$User"
+Get-ADPrincipalGroupMembership $User |select samaccountname,GroupCategory | sort samaccountname 
+} 
+$result | Out-File -Append C:\Distr\Result.csv -Encoding utf8
