@@ -1,0 +1,29 @@
+
+
+$File = $PSScriptRoot + "C:\Distr\Renamepc.csv"
+#
+ If(![System.IO.File]::Exists($File)) {       
+     Write-Host -ForegroundColor Red "`nCSV file doesn't exist!`nCheck path : "$File
+     Break
+}
+#      
+$DomainCred = Get-Credential -Message "Enter domain admin account (DOMAIN\login)"
+$LocalCred = Get-Credential -Message "Enter computer admin account (DOMAIN\login)"
+$computerList = Import-Csv -Path $File -Delimiter "," -Header OldName,NewName
+ForEach ($Computer in $computerList)
+{
+    Write-Host "`nProcessing:"$Computer.OldName
+    If (Test-Connection -Computername $Computer.OldName -BufferSize 16 -Count 1 -Quiet) 
+    {
+     Write-Host "Ping OK. Renaming..."
+     Rename-Computer -ComputerName $Computer.OldName `
+                     -NewName $Computer.NewName `
+                     -LocalCredential $LocalCred `
+                     -DomainCredential $DomainCred `
+                     -Force
+    } 
+    Else 
+    {
+     Write-Host -ForegroundColor Red "Host unavailable"
+    }
+}

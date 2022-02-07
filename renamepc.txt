@@ -1,0 +1,2 @@
+Enter-PSSession -ComputerName TEST01
+Rename-Computer -ComputerName TEST01 -NewName TEST04 -DomainCredential BCSPRIME\dzhurzhalin -Force -Restart
