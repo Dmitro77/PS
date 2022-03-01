@@ -1,0 +1,2 @@
+query session /server servername
+Mstsc /v:servername /shadow:# /control
